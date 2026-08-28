@@ -1,0 +1,9 @@
+node_modules
+dist
+.DS_Store
+*.local
+.env
+.env.*
+*.pem
+*账号*.txt
+Hub*.txt
