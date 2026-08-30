@@ -4,8 +4,8 @@ import type { BrandKind } from '../content/site'
 import { useLocale } from '../context/locale-context'
 import garmaLogo from '../assets/brands/garma-logo.jpg'
 import bluemapleLogo from '../assets/brands/bluemaple-logo.jpg'
-import sunjoyLogo from '../assets/brands/sunjoy-logo.png'
-import wuenLogo from '../assets/brands/wuen-logo.jpg'
+import sunjoyLogo from '../assets/brands/sunjoy-logo-white.png'
+import wuenLogo from '../assets/brands/wuen-logo-white.png'
 import hangeLogo from '../assets/brands/hange-logo.jpg'
 
 type BrandLogo = {
@@ -15,13 +15,14 @@ type BrandLogo = {
   emblem?: boolean
   knockout?: boolean
   onDark?: boolean
+  preferLocal?: boolean
 }
 
 const brandLogos: Record<string, BrandLogo> = {
   garma: { src: garmaLogo, knockout: true, onDark: true },
   bluemaple: { src: bluemapleLogo, lockup: true },
-  sunjoy: { src: sunjoyLogo, wide: true, knockout: true },
-  wuen: { src: wuenLogo, emblem: true, knockout: true },
+  sunjoy: { src: sunjoyLogo, wide: true, preferLocal: true },
+  wuen: { src: wuenLogo, emblem: true, preferLocal: true },
   hange: { src: hangeLogo, wide: true, knockout: true, onDark: true },
 }
 
@@ -102,7 +103,12 @@ export function BrandGrid({
         const style = { '--brand': brand.color, '--i': index } as CSSProperties
         const bundled = brandLogos[brand.id]
         const cmsSrc = snapshot?.images?.[`brand.${brand.id}`]?.url
-        const logo = bundled || cmsSrc ? { ...(bundled || { src: cmsSrc || '' }), src: cmsSrc || bundled?.src || '' } : undefined
+        const logo = bundled || cmsSrc
+          ? {
+              ...(bundled || { src: cmsSrc || '' }),
+              src: bundled?.preferLocal ? bundled.src : cmsSrc || bundled?.src || '',
+            }
+          : undefined
         const inner = panels ? (
           <div className="brand-copy">
             <div className="brand-name">{brand.nameEn}</div>
