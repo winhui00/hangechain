@@ -1,11 +1,17 @@
 import { useEffect } from 'react'
-import { pageTitle } from './content/site'
+import { useCms } from './content/cms'
 import { useLocale } from './context/locale-context'
 
 export function usePageTitle(page: string) {
-  const { locale } = useLocale()
+  const { locale, t } = useLocale()
+  const { snapshot } = useCms()
 
   useEffect(() => {
-    document.title = pageTitle(locale, page)
-  }, [locale, page])
+    const seoTitle = snapshot?.seo?.title
+    if (page === t.siteTitle && seoTitle) {
+      document.title = seoTitle
+      return
+    }
+    document.title = page === t.siteTitle ? t.siteTitle : `${page} · ${t.siteTitle}`
+  }, [locale, page, snapshot?.seo?.title, t.siteTitle])
 }

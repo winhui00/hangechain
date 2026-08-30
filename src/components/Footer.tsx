@@ -1,42 +1,30 @@
-import { Link } from 'react-router-dom'
-import { contact, navGroups } from '../content/site'
+import { NavLink } from 'react-router-dom'
+import { useCmsContact, useCmsLegal } from '../content/cms'
 import { useLocale } from '../context/locale-context'
 
 export function Footer() {
-  const { locale, t } = useLocale()
+  const { t } = useLocale()
+  const contact = useCmsContact()
+  const { legalTabs } = useCmsLegal()
   const year = new Date().getFullYear()
 
   return (
     <footer className="footer">
-      <div className="wrap footer-grid">
-        <div>
-          <div className="wordmark">{t.wordmark}</div>
-          <p style={{ marginTop: 12 }}>{t.copyright}</p>
-        </div>
-        {navGroups.map((group) => (
-          <nav key={group.id} aria-label={locale === 'zh' ? group.zh : group.en}>
-            <p className="footer-label">{locale === 'zh' ? group.zh : group.en}</p>
-            {group.path && group.children.length === 0 ? (
-              <Link to={group.path}>{locale === 'zh' ? group.zh : group.en}</Link>
-            ) : (
-              group.children.map((child) => (
-                <div key={child.path}>
-                  <Link to={child.path}>{locale === 'zh' ? child.zh : child.en}</Link>
-                </div>
-              ))
-            )}
-          </nav>
-        ))}
-        <div className="footer-meta">
-          <p className="footer-label">{t.footerLegal}</p>
-          <span>{t.icp}</span>
+      <div className="wrap">
+        <p className="footer-legal">
           <span>
-            {t.emailLabel} {contact.email}
+            © {year} HGC {t.copyright}
           </span>
-          {contact.emailPlaceholder ? <span>{t.emailNote}</span> : null}
-        </div>
+          <a href={contact.icpHref} target="_blank" rel="noreferrer">
+            {contact.icp}
+          </a>
+          {legalTabs.map((item) => (
+            <NavLink key={item.path} to={item.path} end={item.path === '/legal'}>
+              {item.title}
+            </NavLink>
+          ))}
+        </p>
       </div>
-      <div className="wrap footer-copy">© {year} {t.copyright}</div>
     </footer>
   )
 }

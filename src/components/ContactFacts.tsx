@@ -1,8 +1,9 @@
-import { contact } from '../content/site'
+import { useCmsContact } from '../content/cms'
 import { useLocale } from '../context/locale-context'
 
 export function ContactFacts() {
   const { locale, t } = useLocale()
+  const contact = useCmsContact()
 
   return (
     <dl className="facts">
