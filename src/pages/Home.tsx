@@ -44,12 +44,12 @@ export function Home() {
             <aside className="intro-aside">
               <ul className="quicklinks">
                 <li>
-                  <Link to="/business">
+                  <Link to="/brands">
                     {t.home.heroBusiness} {t.arrow}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/brands">
+                  <Link to="/business">
                     {t.home.heroBrands} {t.arrow}
                   </Link>
                 </li>
