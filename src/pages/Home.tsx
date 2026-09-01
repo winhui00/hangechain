@@ -1,42 +1,61 @@
 import { Link } from 'react-router-dom'
+import geneDigital from '../assets/genes/digital-tools.jpg'
+import geneFirst from '../assets/genes/first-principles.jpg'
+import geneOriginal from '../assets/genes/original-dev.jpg'
 import { BrandGrid } from '../components/BrandGrid'
-import { ContactFacts } from '../components/ContactFacts'
-import { InquiryForm } from '../components/InquiryForm'
+import { FieldGrid } from '../components/FieldGrid'
+import { HeroSchematic } from '../components/HeroSchematic'
+import { useCmsImage } from '../content/cms'
 import { useLocale } from '../context/locale-context'
 import { usePageTitle } from '../hooks'
 
+const geneAlts = ['建筑气候分层模型', '建筑气候数字设计工作台', '暖通阀原创样件']
+
+function keepLines(text: string) {
+  return String(text || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/。(?=不)/g, '。\n')
+    .replace(/更是磨砺；\n?/g, '更是磨砺；\n')
+    .replace(/更扬长项；\n?/g, '更扬长项；\n')
+    .replace(/更讲让渡；\n?/g, '更讲让渡；\n')
+}
+
 export function Home() {
   const { t } = useLocale()
+  const genes = [useCmsImage('gene.0', geneFirst), useCmsImage('gene.1', geneDigital), useCmsImage('gene.2', geneOriginal)]
   usePageTitle(t.siteTitle)
 
   return (
     <>
       <section className="intro">
         <div className="banner">
-          <img src="/hangechain-hero.png" alt="" />
+          <div className="banner-atmosphere" aria-hidden />
+          <div className="banner-schematic" aria-hidden>
+            <HeroSchematic />
+          </div>
           <div className="banner-inner wrap">
             <div className="banner-copy">
               <h1>
-                <span>Climate Intelligence</span>
-                <span>Refined Living</span>
+                <span>{t.heroLine1}</span>
+                <span>{t.heroLine2}</span>
               </h1>
               <p className="intro-cn">{t.sloganZh}</p>
             </div>
             <aside className="intro-aside">
               <ul className="quicklinks">
                 <li>
-                  <Link to="/business">
-                    {t.home.fieldsTitle} {t.arrow}
-                  </Link>
-                </li>
-                <li>
                   <Link to="/brands">
-                    {t.home.brandsTitle} {t.arrow}
+                    {t.home.heroBusiness} <span className="cta-arrow">{t.arrow}</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/contact">
-                    {t.inquire} {t.arrow}
+                  <Link to="/tech">
+                    {t.home.heroBrands} <span className="cta-arrow">{t.arrow}</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/platform">
+                    {t.home.heroContact} <span className="cta-arrow">{t.arrow}</span>
                   </Link>
                 </li>
               </ul>
@@ -46,73 +65,61 @@ export function Home() {
       </section>
 
       <section className="brand-strip" aria-label={t.home.brandsTitle}>
-        <BrandGrid variant="panels" />
+        <div className="wrap">
+          <BrandGrid variant="panels" />
+        </div>
+      </section>
+
+      <section className="section alt genes" aria-labelledby="genes-title">
+        <div className="wrap">
+          <p className="kicker">{t.home.genesKicker}</p>
+          <h2 id="genes-title">{t.home.genesTitle}</h2>
+          <p className="lead">{t.home.genesLead}</p>
+          <div className="gene-cards">
+            {t.home.genes.map((gene, index) => (
+              <article className="gene-card" key={gene.name}>
+                <div className="gene-visual">
+                  <img
+                    src={genes[index]}
+                    alt={geneAlts[index]}
+                    width={800}
+                    height={500}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div className="gene-body">
+                  <h3>{gene.name}</h3>
+                  <p className="gene-en">{gene.nameEn}</p>
+                  <p>{gene.text}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section className="section">
         <div className="wrap">
-          <p className="kicker">{t.home.profileKicker}</p>
-          <h2>{t.home.profileTitle}</h2>
-          <div className="prose">
-            {t.home.profile.slice(0, 3).map((p) => (
-              <p key={p}>{p}</p>
-            ))}
-          </div>
-          <p style={{ marginTop: 28 }}>
-            <Link className="text-cta" to="/about">
-              {t.readMore} {t.arrow}
-            </Link>
-          </p>
-        </div>
-      </section>
-
-      <section className="section alt">
-        <div className="wrap">
           <p className="kicker">{t.home.fieldsKicker}</p>
           <h2>{t.home.fieldsTitle}</h2>
           <p className="lead">{t.home.fieldsLead}</p>
-          <div className="fields">
-            {t.home.fields.map((field) => (
-              <Link className="field-card" key={field.name} to={field.to}>
-                <h3>
-                  {field.name} <span className="cta-arrow">{t.arrow}</span>
-                </h3>
-                <p>{field.text}</p>
-              </Link>
-            ))}
-          </div>
+          <FieldGrid />
         </div>
       </section>
 
-      <section className="section alt">
-        <div className="wrap news">
-          <div>
-            <p className="kicker">{t.home.updateKicker}</p>
-            <h2>{t.home.updateTitle}</h2>
-          </div>
-          <article className="news-item">
-            <p className="news-meta">
-              {t.home.updateKind} · {t.home.updateDate}
-            </p>
-            <p>{t.home.updateItem}</p>
-          </article>
-        </div>
-      </section>
-
-      <section className="section contact-band">
-        <div className="wrap">
-          <p className="kicker">{t.home.inquiryKicker}</p>
-          <h2>{t.home.inquiryTitle}</h2>
-          <p className="lead">{t.contactExpect}</p>
-          <div className="inquiry">
-            <ContactFacts />
-            <div>
-              <p className="lead" style={{ marginTop: 0 }}>
-                {t.home.inquiryLead}
-              </p>
-              <InquiryForm />
-            </div>
-          </div>
+      <section className="home-gates" aria-label={`${t.home.gates[0].title} / ${t.home.gates[1].title}`}>
+        <div className="wrap home-gates-row">
+          {t.home.gates.map((gate) => (
+            <Link className={`home-gate is-${gate.id}`} key={gate.id} to={gate.to}>
+              <p className="kicker">{gate.kicker}</p>
+              <h2>{gate.title}</h2>
+              <p>{keepLines(gate.text)}</p>
+              <span className="home-gate-cta">
+                {gate.cta} <span className="cta-arrow">{t.arrow}</span>
+              </span>
+            </Link>
+          ))}
         </div>
       </section>
     </>

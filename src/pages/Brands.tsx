@@ -1,4 +1,4 @@
-import { BrandGrid } from '../components/BrandGrid'
+import { BrandMatrixGroup } from '../components/BrandGrid'
 import { useLocale } from '../context/locale-context'
 import { usePageTitle } from '../hooks'
 
@@ -10,16 +10,21 @@ export function Brands() {
     <>
       <section className="page-head">
         <div className="wrap">
-          <p className="kicker">{t.brandsPage.kicker}</p>
-          <h1>{t.brandsPage.title}</h1>
-          <p className="lead">{t.brandsPage.lead}</p>
+          <h1>{t.brandsPage.kicker}</h1>
+          <p className="page-head-en">{t.brandsPage.title}</p>
+          <div className="page-head-lead">
+            <p>{t.brandsPage.lead}</p>
+          </div>
         </div>
       </section>
-      <section className="section" style={{ paddingTop: 12 }}>
+      <section className="section" style={{ paddingTop: 24 }}>
         <div className="wrap">
-          <BrandGrid />
-          <h2 style={{ marginTop: 64, fontSize: 28 }}>{t.brandsPage.logicTitle}</h2>
-          <p className="lead">{t.brandsPage.logic}</p>
+          <BrandMatrixGroup kind="own" />
+          <BrandMatrixGroup kind="agency" />
+          <div className="brand-logic">
+            <h2>{t.brandsPage.logicTitle}</h2>
+            <p className="lead">{t.brandsPage.logic}</p>
+          </div>
         </div>
       </section>
     </>
