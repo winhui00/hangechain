@@ -15,14 +15,18 @@ type BrandLogo = {
   emblem?: boolean
   knockout?: boolean
   onDark?: boolean
-  preferLocal?: boolean
 }
 
+/**
+ * Homepage brand-strip art is locked here.
+ * CMS uploads may still appear on /brands float cards, but they must not
+ * replace knockout / white marks on the red·orange pop cards.
+ */
 const brandLogos: Record<string, BrandLogo> = {
   garma: { src: garmaLogo, knockout: true, onDark: true },
   bluemaple: { src: bluemapleLogo, lockup: true },
-  sunjoy: { src: sunjoyLogo, wide: true, preferLocal: true },
-  wuen: { src: wuenLogo, emblem: true, preferLocal: true },
+  sunjoy: { src: sunjoyLogo, wide: true },
+  wuen: { src: wuenLogo, emblem: true },
   hange: { src: hangeLogo, wide: true, knockout: true, onDark: true },
 }
 
@@ -129,15 +133,12 @@ export function BrandGrid({
         const style = { '--brand': brand.color, '--i': index } as CSSProperties
         const bundled = brandLogos[brand.id]
         const cmsSrc = snapshot?.images?.[`brand.${brand.id}`]?.url
-        // CMS upload wins for brand cards; keep local lockup/knockout only when no upload.
-        const logo = cmsSrc
-          ? { src: cmsSrc }
-          : bundled
-            ? { ...bundled, src: bundled.src }
-            : undefined
+        const panelLogo = bundled ?? (cmsSrc ? { src: cmsSrc } : undefined)
+        const floatLogo = cmsSrc ? { src: cmsSrc } : bundled
         const logoMark = (opts?: { float?: boolean }) => {
           const float = Boolean(opts?.float)
-          // Float: always show the uploaded/source image as-is (no canvas knockout / lockup crop).
+          const logo = float ? floatLogo : panelLogo
+          // Float: show the uploaded/source image as-is (no canvas knockout / lockup crop).
           if (float) {
             return (
               <div className="brand-logo is-float">
@@ -208,7 +209,7 @@ export function BrandGrid({
                 <span className="brand-link soon">{t.comingSoon}</span>
               )}
             </div>
-            {logo?.src ? (
+            {floatLogo?.src || panelLogo?.src ? (
               <div className="brand-card-float" aria-hidden="true">
                 {logoMark({ float: true })}
               </div>

@@ -157,11 +157,26 @@ function deepMerge<T>(base: T, overlay: unknown): T {
   return next as T
 }
 
+function sameOriginUpload(url: string, base: string): string {
+  if (!url) return url
+  if (url.startsWith('http')) {
+    try {
+      const parsed = new URL(url)
+      const host = parsed.hostname.replace(/^www\./, '')
+      if (host === 'hangechain.com') return parsed.pathname + parsed.search
+    } catch {
+      return url
+    }
+    return url
+  }
+  return base + url
+}
+
 function abs(base: string, data: CmsSnapshot): CmsSnapshot {
   const images: Record<string, CmsImage> = {}
   for (const [key, rec] of Object.entries(data.images || {})) {
     const url = rec?.url || ''
-    images[key] = { ...rec, url: url.startsWith('http') ? url : base + url }
+    images[key] = { ...rec, url: sameOriginUpload(url, base) }
   }
   return { ...data, images }
 }
