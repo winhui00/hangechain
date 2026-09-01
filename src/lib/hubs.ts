@@ -8,8 +8,23 @@ export type HubItem = {
   card?: string
   text?: string
   body?: string
+  /** Card click URL from CMS. Empty → open the in-site detail page. */
+  href?: string
   cta?: string
   ctaTo?: string
+}
+
+export function hubCardHref(item: Pick<HubItem, 'href'>) {
+  const raw = String(item.href || '').trim()
+  if (!raw) return ''
+  if (/^(https?:)?\/\//i.test(raw) || /^(mailto|tel):/i.test(raw)) return raw
+  if (raw.startsWith('/') && !raw.startsWith('//')) return raw
+  if (/^[\w.-]+\.[a-z]{2,}([/:?#].*)?$/i.test(raw)) return `https://${raw}`
+  return raw.startsWith('/') ? raw : `/${raw}`
+}
+
+export function isOffsiteHref(href: string) {
+  return /^(https?:)?\/\//i.test(href) || /^(mailto|tel):/i.test(href)
 }
 
 export type HubCopy = {
