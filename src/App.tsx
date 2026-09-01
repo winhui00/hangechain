@@ -10,6 +10,8 @@ import { Contact } from './pages/Contact'
 import { Extra } from './pages/Extra'
 import { History } from './pages/History'
 import { Home } from './pages/Home'
+import { Hub } from './pages/Hub'
+import { HubDetail } from './pages/HubDetail'
 import { Legal } from './pages/Legal'
 import { Quality } from './pages/Quality'
 
@@ -25,6 +27,10 @@ export function App() {
               <Route path="/history" element={<History />} />
               <Route path="/business" element={<Business />} />
               <Route path="/business/:slug" element={<BusinessDetail />} />
+              <Route path="/tech" element={<Hub kind="tech" />} />
+              <Route path="/tech/:slug" element={<HubDetail kind="tech" />} />
+              <Route path="/platform" element={<Hub kind="platform" />} />
+              <Route path="/platform/:slug" element={<HubDetail kind="platform" />} />
               <Route path="/brands" element={<Brands />} />
               <Route path="/quality" element={<Quality />} />
               <Route path="/contact" element={<Contact />} />

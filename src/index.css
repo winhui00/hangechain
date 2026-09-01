@@ -432,14 +432,52 @@ p {
 }
 
 .quicklinks a {
-  display: inline-block;
+  display: block;
+  position: relative;
   padding: 10px 0;
-  color: #fff;
+  color: color-mix(in srgb, #fff 86%, transparent);
   font-size: 16px;
+  transition: color 0.45s var(--ease);
+}
+
+.quicklinks a .cta-arrow {
+  display: inline-block;
+  transition: transform 0.55s var(--ease);
+}
+
+.quicklinks a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 1px;
+  background: color-mix(in srgb, var(--ivory) 92%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--rule-dur) var(--rule-ease);
+  pointer-events: none;
 }
 
 .quicklinks li {
   border-top: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .quicklinks a:hover,
+  .quicklinks a:focus-visible {
+    color: #fff;
+  }
+
+  .quicklinks a:hover::after,
+  .quicklinks a:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  .quicklinks a:hover .cta-arrow,
+  .quicklinks a:focus-visible .cta-arrow {
+    transform: translateX(5px);
+  }
 }
 
 .text-cta {
@@ -621,6 +659,7 @@ p {
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-width: 0;
+  background: #152022;
 }
 
 .home-gate {
@@ -636,28 +675,45 @@ p {
   color: var(--on-dark);
   background: var(--gate);
   isolation: isolate;
+  transition: background 0.45s var(--ease);
 }
 
 .home-gate.is-join {
-  --gate: #152022;
+  --gate: #1a2c30;
 }
 
 .home-gate.is-talk {
-  --gate: #1a2c30;
+  --gate: #152022;
+}
+
+.home-gate::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--ivory) 14%, transparent);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-gate > * {
+  position: relative;
+  z-index: 1;
 }
 
 .home-gate::after {
   content: '';
   position: absolute;
   left: 0;
+  right: 0;
   top: 0;
-  width: 100%;
   height: 1px;
-  background: color-mix(in srgb, var(--ivory) 72%, transparent);
-  transform: scaleX(0.12);
-  transform-origin: left center;
-  transition: transform var(--rule-dur) var(--rule-ease);
+  background: color-mix(in srgb, var(--ivory) 78%, transparent);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
   pointer-events: none;
+  z-index: 2;
 }
 
 .home-gate .kicker {
@@ -698,12 +754,17 @@ p {
 @media (hover: hover) and (pointer: fine) {
   .home-gate:hover,
   .home-gate:focus-visible {
-    background: color-mix(in srgb, var(--gate) 82%, #2a4a4e);
+    background: color-mix(in srgb, var(--gate) 78%, #3d5c62);
+  }
+
+  .home-gate:hover::before,
+  .home-gate:focus-visible::before {
+    opacity: 1;
   }
 
   .home-gate:hover::after,
   .home-gate:focus-visible::after {
-    transform: scaleX(1);
+    opacity: 1;
   }
 
   .home-gate:hover .home-gate-cta .cta-arrow,
@@ -861,6 +922,14 @@ p {
 }
 
 .business-detail .culture-lines {
+  margin-top: 8px;
+}
+
+.business-detail .brand-group {
+  margin-top: 0;
+}
+
+.business-detail .brand-group .grid-7 {
   margin-top: 8px;
 }
 
@@ -1172,6 +1241,9 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.brand-panel .brand-logo {
   opacity: 0;
   transform: translateY(12px);
   transition:
@@ -1407,16 +1479,105 @@ p {
 
 .grid-7 .brand-card {
   --i: 0;
+  --brand-wash: color-mix(in srgb, var(--brand) 16%, white);
+  --brand-deep: color-mix(in srgb, var(--brand) 82%, black);
   background: var(--paper);
-  padding: 22px 18px 18px;
-  min-height: 148px;
+  padding: 22px 248px 18px 18px;
+  min-height: 176px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   border: 1px solid var(--line);
   animation: fade-in 0.9s var(--ease) backwards;
   animation-delay: calc(var(--i) * 70ms);
-  transition: border-color 0.5s var(--ease);
+  transition:
+    border-color 0.45s var(--ease),
+    background 0.45s var(--ease),
+    color 0.45s var(--ease),
+    box-shadow 0.45s var(--ease);
+}
+
+.grid-7 .brand-card-main {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+  max-width: min(100%, 28rem);
+}
+
+.grid-7 .brand-card-float {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  z-index: 1;
+  width: 216px;
+  height: 112px;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(22px, -50%);
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.55s var(--ease);
+}
+
+.grid-7 .brand-card-float .brand-logo,
+.grid-7 .brand-card-float .brand-logo.is-float {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: visible;
+  opacity: 1;
+  transform: none;
+}
+
+.grid-7 .brand-card-float .brand-logo img,
+.grid-7 .brand-card-float .brand-logo.is-float img,
+.grid-7 .brand-card-float .brand-logo.is-wide img,
+.grid-7 .brand-card-float .brand-logo.is-emblem img,
+.grid-7 .brand-card-float .brand-logo.is-knockout img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+  object-position: center;
+  flex: none;
+  filter: drop-shadow(0 6px 14px color-mix(in srgb, #000 32%, transparent));
+}
+
+.grid-7 .brand-card-float .brand-logo-type {
+  font-family: 'IBM Plex Sans', 'Noto Sans SC', sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-right: 0;
+  text-transform: uppercase;
+  color: #fff;
+  text-align: center;
+  line-height: 1.1;
+  height: auto;
+  max-width: 100%;
+  overflow: visible;
+  text-overflow: unset;
+  white-space: nowrap;
+  opacity: 0.96;
+  text-shadow: 0 6px 14px color-mix(in srgb, #000 32%, transparent);
 }
 
 .grid-7 .brand-card::after {
@@ -1429,23 +1590,68 @@ p {
   background: var(--brand);
   transform: scaleX(0.12);
   transform-origin: left center;
-  transition: transform var(--rule-dur) var(--rule-ease);
+  transition:
+    transform var(--rule-dur) var(--rule-ease),
+    background 0.45s var(--ease),
+    opacity 0.45s var(--ease);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .grid-7 .brand-card:hover,
   .grid-7 .brand-card:focus-visible {
-    border-color: color-mix(in srgb, var(--brand) 42%, var(--line));
+    border-color: color-mix(in srgb, var(--brand) 55%, transparent);
+    background: linear-gradient(
+      90deg,
+      var(--brand-wash) 0%,
+      color-mix(in srgb, var(--brand) 55%, white) 38%,
+      var(--brand) 72%,
+      var(--brand-deep) 100%
+    );
+    color: inherit;
+    box-shadow: 0 16px 36px color-mix(in srgb, var(--brand) 22%, transparent);
   }
 
   .grid-7 .brand-card:hover::after,
   .grid-7 .brand-card:focus-visible::after {
     transform: scaleX(1);
+    background: color-mix(in srgb, #fff 45%, var(--brand));
   }
 
   .grid-7 .brand-card:hover .brand-name,
   .grid-7 .brand-card:focus-visible .brand-name {
-    color: var(--brand);
+    color: var(--brand-deep);
+    text-shadow:
+      0 1px 0 color-mix(in srgb, #fff 70%, transparent),
+      0 0 18px color-mix(in srgb, #fff 55%, transparent);
+  }
+
+  .grid-7 .brand-card:hover .brand-local,
+  .grid-7 .brand-card:focus-visible .brand-local {
+    color: color-mix(in srgb, var(--brand-deep) 55%, var(--muted));
+    text-shadow: 0 1px 0 color-mix(in srgb, #fff 55%, transparent);
+  }
+
+  .grid-7 .brand-card:hover .brand-tag,
+  .grid-7 .brand-card:focus-visible .brand-tag {
+    color: color-mix(in srgb, var(--ink) 82%, var(--brand));
+    text-shadow: 0 1px 0 color-mix(in srgb, #fff 50%, transparent);
+  }
+
+  .grid-7 .brand-card:hover .brand-link,
+  .grid-7 .brand-card:focus-visible .brand-link {
+    color: var(--link);
+    text-shadow: 0 1px 0 color-mix(in srgb, #fff 45%, transparent);
+  }
+
+  .grid-7 .brand-card:hover .brand-link.soon,
+  .grid-7 .brand-card:focus-visible .brand-link.soon {
+    color: var(--faint);
+  }
+
+  .grid-7 .brand-card:hover .brand-card-float,
+  .grid-7 .brand-card:focus-visible .brand-card-float {
+    opacity: 1;
+    transform: translate(0, -50%);
   }
 }
 
@@ -1467,6 +1673,25 @@ p {
 
 .brand-local {
   font-size: 13px;
+  color: var(--faint);
+}
+
+.grid-7 .brand-name {
+  font-family: 'Noto Sans SC', 'IBM Plex Sans', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.grid-7 .brand-local {
+  margin-top: 4px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
   color: var(--faint);
 }
 
@@ -2591,6 +2816,25 @@ p {
     gap: 28px;
   }
 
+  .grid-7 {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-7 .brand-card {
+    padding-right: 188px;
+  }
+
+  .grid-7 .brand-card-float {
+    width: 160px;
+    height: 88px;
+    right: 14px;
+  }
+
+  .grid-7 .brand-card-float .brand-logo-type {
+    font-size: 22px;
+    letter-spacing: 0.04em;
+  }
+
   .inquiry {
     gap: 40px;
   }
@@ -2769,11 +3013,23 @@ p {
     .field-card::after,
     .home-gate::after,
     .grid-7 .brand-card::after,
+    .grid-7 .brand-card-float,
     .cta-arrow,
   .gene-card .gene-visual img {
     animation: none !important;
     transition: none !important;
     clip-path: none !important;
+  }
+
+  .brand-reveal,
+  .brand-logo,
+  .brand-meta,
+  .brand-panel .brand-name,
+  .brand-sheen::before,
+  .brand-sheen::after,
+  .field-card::after,
+  .home-gate::after,
+  .gene-card .gene-visual img {
     opacity: 1 !important;
   }
 }

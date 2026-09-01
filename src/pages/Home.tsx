@@ -45,17 +45,17 @@ export function Home() {
               <ul className="quicklinks">
                 <li>
                   <Link to="/brands">
-                    {t.home.heroBusiness} {t.arrow}
+                    {t.home.heroBusiness} <span className="cta-arrow">{t.arrow}</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/business">
-                    {t.home.heroBrands} {t.arrow}
+                  <Link to="/tech">
+                    {t.home.heroBrands} <span className="cta-arrow">{t.arrow}</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/p/page-mtemc5ka">
-                    {t.home.heroContact} {t.arrow}
+                  <Link to="/platform">
+                    {t.home.heroContact} <span className="cta-arrow">{t.arrow}</span>
                   </Link>
                 </li>
               </ul>
